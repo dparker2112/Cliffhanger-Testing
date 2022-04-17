@@ -1,15 +1,46 @@
 #include <Arduino.h>
 
-byte falllocationPin = 26;
+byte fallPin = 26;
 
-byte fallPin = 31;
+byte fallsoundPin = 31;
 
 byte ledPin = 13;
 
+boolean fallpinActive = false;
+
 void setup() { 
 
-    pinMode(falllocationPin, INPUT_PULLUP);
+    pinMode(fallPin, INPUT_PULLUP);
     pinMode(ledPin, OUTPUT);
-    pinMode(fallPin, OUTPUT);
+    pinMode(fallsoundPin, OUTPUT);
 
+}
+
+void loop() {
+
+  readfallPin();
+  playfallSound();
+}
+
+void readfallPin() {
+
+    fallpinActive = false;
+
+    if (digitalRead(fallPin) == LOW) {
+        fallpinActive = true;
+    }
+    if (digitalRead(fallPin) == HIGH) {
+        fallpinActive = false;
+    }
+}
+
+void playfallSound() {
+
+    if (fallpinActive == true) {
+        digitalWrite(fallsoundPin, LOW);
+    }
+    if (fallpinActive == false) {
+        digitalWrite(fallsoundPin, HIGH);
+        digitalWrite(ledPin, HIGH);
+    }
 }
